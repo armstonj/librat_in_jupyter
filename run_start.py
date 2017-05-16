@@ -1,3 +1,5 @@
+from __future__ import print_function, division
+
 import subprocess
 import os
 
@@ -16,7 +18,7 @@ def run_start(cmd):
 
     error = None
     for line in start_process.stderr:
-        print line
+        print(line)
         if line.startswith('rat'):
             error = True
         elif line.startswith('error'):

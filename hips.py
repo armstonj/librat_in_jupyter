@@ -1,3 +1,5 @@
+from __future__ import print_function, division
+
 import os
 import numpy as np
 import matplotlib.pyplot as plt
@@ -82,3 +84,4 @@ def hips2img(fname, order=[0,1,2], stretch=True, imshow=True,
         plt.show()
 
     return ax
+

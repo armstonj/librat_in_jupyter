@@ -1,3 +1,5 @@
+from __future__ import print_function, division
+
 import numpy as np
 import sys
 
@@ -23,4 +25,5 @@ if __name__ == '__main__':
     obj = sys.argv[1]
     for D, V in zip(['xmin', 'xmax', 'ymin', 'ymax', 'zmin', 'zmax'],
                     bbox(obj)):
-        print '{}:{:.2f}'.format(D, V)
+        print('{}:{:.2f}'.format(D, V))
+

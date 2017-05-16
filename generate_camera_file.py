@@ -1,3 +1,5 @@
+from __future__ import print_function, division
+
 import sys
 import os
 import getpass
@@ -174,7 +176,7 @@ def write_camera(fname, camera_settings, comment, verbose):
             elif isinstance(V, bool):
                 V = '{}'.format({True:'TRUE', False:'FALSE'}[V])
             cam.write('{} = {};\n'.format(K, V))
-            if verbose: print '{} = {};\n'.format(K, V).strip()
+            if verbose: print('{} = {};\n'.format(K, V).strip())
         
         cam.write('}')
     
@@ -188,6 +190,7 @@ if __name__ == '__main__':
             if arg == '--comment':
                 comment = sys.argv[i + 3]
             else:
-                print '{} not understood'.format(arg)
+                print('{} not understood'.format(arg))
     
     camera(fname, comment=comment)
+

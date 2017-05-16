@@ -12,6 +12,8 @@ Almar Klein (June 2009)
 
 """
 
+from __future__ import print_function, division
+
 try:
     import PIL
     from PIL import Image, ImageChops
@@ -201,7 +203,7 @@ def writeGif(filename, images, duration=0.1, loops=0, dither=1):
     # write
     try:
         n = _writeGifToFile(fp, images2, durations, loops)
-        print n, 'frames written'
+        print(n, 'frames written')
     finally:
         fp.close()
     
