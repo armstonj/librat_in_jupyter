@@ -15,8 +15,8 @@ def read_header(fname):
     """
 
     # grab header info
-    header_length = open(fname).read().find('\n.')
-    header = open(fname).read()[:header_length].split()
+    header_length = open(fname, encoding='ISO-8859-1').read().find('\n.')
+    header = open(fname, encoding='ISO-8859-1').read()[:header_length].split()
     bands = int(header[1])
     res_x = int(header[2])
     res_y = int(header[3])

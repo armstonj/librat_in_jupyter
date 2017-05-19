@@ -18,7 +18,8 @@ def run_start(cmd):
 
     error = None
     for line in start_process.stderr:
-        print(line)
+        #print(line)
+        line = line.decode('ascii')
         if line.startswith('rat'):
             error = True
         elif line.startswith('error'):

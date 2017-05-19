@@ -76,11 +76,12 @@ def camera(fname,
     results['result.integral'] = oname + '.results'
         
     ### concatenate settings
-    camera_settings = OrderedDict(camera.items() + 
-                                  geometry.items() +
-                                  sampling.items() +
-                                  results.items())
-                                  
+    camera_settings = OrderedDict()
+    camera_settings.update(camera)
+    camera_settings.update(geometry)
+    camera_settings.update(sampling)
+    camera_settings.update(results)
+                              
     for drop in remove:
         del camera_settings[drop]
         
