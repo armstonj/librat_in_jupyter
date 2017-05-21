@@ -3,7 +3,7 @@ from __future__ import print_function, division
 import os
 import numpy as np
 import matplotlib.pyplot as plt
-
+import matplotlib.animation as animation
 
 def read_header(fname):
 
@@ -52,6 +52,20 @@ def hips2img(fname, order=[0,1,2], stretch=True, imshow=True,
     
     img, bands, res_x, res_y, fmt = read_hips(fname)
     
+    # data to display
+    if order is None:
+        img = np.nansum(img, axis=2)
+        img = np.expand_dims(img, 2)
+        order = 0
+        cmap = 'gray'
+        bands = 1
+    else:
+        if len(order) == 1 or bands == 1:
+            order = order[0]
+            cmap = 'gray'
+        else:
+            cmap = 'spectral'
+
     #stretch
     for b in range(bands):
         arr_b = img[:, :, b]
@@ -64,12 +78,6 @@ def hips2img(fname, order=[0,1,2], stretch=True, imshow=True,
     # display image
     if not ax:
         fig, ax = plt.subplots(figsize=(10, 10))
-
-    if len(order) == 1 or bands == 1:
-        order = order[0]
-        cmap = 'gray'
-    else:
-        cmap = 'spectral'
 
     ax.imshow(img[:, :, order], cmap=cmap, interpolation='none')
     ax.axis('off')
@@ -84,4 +92,28 @@ def hips2img(fname, order=[0,1,2], stretch=True, imshow=True,
         plt.show()
 
     return ax
+
+
+
+def hips2ani(fname, imsave=None, vmin=0, vmax=0.1):
+    
+    img, bands, res_x, res_y, fmt = read_hips(fname)
+    
+    fig = plt.figure(figsize=(10, 10))
+    plt.axis('off')
+
+    ims = []
+    for b in range(bands):      
+        im = plt.imshow(img[:, :, b], cmap='gray', interpolation='none', animated=True, 
+            vmin=vmin, vmax=vmax)
+        ims.append([im])
+    
+    ani = animation.ArtistAnimation(fig, ims, interval=50, repeat_delay=1000)
+    
+    # save image
+    if imsave is not None:
+        ani.save(imsave)
+
+    return ani
+
 
