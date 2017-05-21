@@ -4,6 +4,8 @@ import os
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
+from matplotlib import gridspec
+
 
 def read_header(fname):
 
@@ -94,25 +96,44 @@ def hips2img(fname, order=[0,1,2], stretch=True, imshow=True,
     return ax
 
 
-
-def hips2ani(fname, imsave=None, vmin=0, vmax=0.1):
+def hips2ani(fname, hname, datname, groundRange, vmin=0, vmax=0.1):
     
     img, bands, res_x, res_y, fmt = read_hips(fname)
+    htimg, htbands, htres_x, htres_y, htfmt = read_hips(hname)   
     
-    fig = plt.figure(figsize=(10, 10))
-    plt.axis('off')
-
+    fig = plt.figure(figsize=(25,10))
+    gs = gridspec.GridSpec(1, 3, width_ratios=[3, 3, 1.5])
+    ax1 = plt.subplot(gs[0])
+    ax2 = plt.subplot(gs[1])
+    ax3 = plt.subplot(gs[2])
+    ax1.axis('off')
+    ax2.axis('off')
+    
+    refl = np.loadtxt(datname)
+    
     ims = []
     for b in range(bands):      
-        im = plt.imshow(img[:, :, b], cmap='gray', interpolation='none', animated=True, 
+        
+        im1 = ax1.imshow(htimg[:, :, 0], cmap='gray', interpolation='none')
+        ax1.set_title('Scene height', fontsize=20)         
+
+        im2 = ax2.imshow(img[:, :, b], cmap='gray', interpolation='none', animated=True, 
             vmin=vmin, vmax=vmax)
-        ims.append([im])
+        ax2.set_title('Photon flux', fontsize=20)        
+        
+        refl_tmp = refl[0:b, 1:].sum(axis=1)
+        height_tmp = -(refl[0:b, 0]/2 - groundRange)
+        
+        im3, = ax3.plot(refl_tmp, height_tmp, color='red')
+        ax3.set_ylabel('Height (m)', fontsize=15)
+        ax3.set_xlabel('Apparent reflectance', fontsize=15)
+        ax3.set_title('Waveform', fontsize=20)
+
+        ims.append([im1,im2,im3])
+    
+    plt.tight_layout()
     
     ani = animation.ArtistAnimation(fig, ims, interval=50, repeat_delay=1000)
-    
-    # save image
-    if imsave is not None:
-        ani.save(imsave)
 
     return ani
 
